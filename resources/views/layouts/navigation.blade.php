@@ -18,6 +18,12 @@
                     <x-nav-link :href="route('satisfatura.index')" :active="request()->routeIs('satisfatura.index')">
                         {{ __('Satış Faturası') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('cariler.index')" :active="request()->routeIs('cariler.index','cariler.create','cariler.edit')">
+                        {{ __('Cariler') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('stoklar.index')" :active="request()->routeIs('stoklar.index','stoklar.create','stoklar.edit')">
+                        {{ __('Stoklar') }}
+                    </x-nav-link>
                 </div>
             </div>
 

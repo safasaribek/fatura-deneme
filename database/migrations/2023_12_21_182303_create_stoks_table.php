@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('satis_faturas', function (Blueprint $table) {
+        Schema::create('stoks', function (Blueprint $table) {
             $table->id();
-            $table->integer('stokadi');
-            $table->string('slug')->unique();
+            $table->string('stokadi');
+            $table->string('birim');
             $table->integer('miktar');
             $table->integer('fiyat');
-            $table->integer('kdv');
-            $table->integer('iskonto');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('satis_faturas');
+        Schema::dropIfExists('stoks');
     }
 };

@@ -52,24 +52,26 @@
         <tbody class="divide-y-2 divide-gray-300">
         @foreach($sfatura as $f)
             <tr class="text-left hover:bg-gray-100">
-                <td class="py-2">{{$f['stokadi']}}</td>
                 <td class="py-2">
-                    <input value="{{$f['miktar']}}" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto py-1 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" style="max-width: 80px;">
+                    {{\App\Models\Stok::where('id',$f['stokadi'])->value('stokadi')}}
                 </td>
                 <td class="py-2">
-                    <input value="{{$f['fiyat']}}" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto py-1 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" style="max-width: 80px;">
+                    {{$f['miktar']}}
+                </td>
+                <td class="py-2">
+                    {{$f['fiyat']}}
                 </td>
                 {{--İSKONTO === ($f['miktar']*$f['fiyat'])*($f['iskonto']/100)--}}
                 <td class="py-2">
-                    <input value="{{$f['iskonto']}}" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto py-1 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" style="max-width: 80px;">
+                    %{{$f['iskonto']}}
                 </td>
                 {{--KDV === ($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))*($f['kdv']/100)--}}
                 <td class="py-2">
-                    <input value="{{$f['kdv']}}" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto py-1 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" style="max-width: 80px;">
+                    %{{$f['kdv']}}
                 </td>
                 {{--TOPLAM--}}
                 <td class="py-2">
-                    <input value="{{($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))+($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))*($f['kdv']/100)}}" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto py-1 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" style="max-width: 80px;">
+                    {{($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))+($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))*($f['kdv']/100)}}
                 </td>
                 <td class="py-2">
                     <form action="{{ route('satisfatura.destroy', $f) }}" method="post">
@@ -89,7 +91,7 @@
         </tbody>
     </table>
 
-    <span>
+    <span class="ml-12">
         TOPLAM = {{$toplam}}
     </span>
 

@@ -20,6 +20,10 @@ Route::get('/', function () {
 
 Route::resource('satisfatura',\App\Http\Controllers\SatisFaturaController::class);
 
+Route::resource('cariler',\App\Http\Controllers\CariController::class);
+
+Route::resource('stoklar',\App\Http\Controllers\StokController::class);
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

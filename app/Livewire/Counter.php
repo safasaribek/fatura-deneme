@@ -2,7 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Models\Cari;
 use App\Models\SatisFatura;
+use App\Models\Stok;
 use Livewire\Component;
 
 class Counter extends Component
@@ -29,6 +31,8 @@ class Counter extends Component
 
     public function render()
     {
-        return view('livewire.counter');
+        $cariler = Cari::all();
+        $stoklar = Stok::all();
+        return view('livewire.counter',compact('cariler','stoklar'));
     }
 }
