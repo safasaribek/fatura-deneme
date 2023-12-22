@@ -37,62 +37,90 @@
     {{--    <livewire:hello-world/>--}}
     @livewireScripts
 
-    <table class="table-auto w-full m-10 max-w-3xl">
-        <thead class="border-b-2 border-gray-300">
+    <div class="flex flex-col">
+        <table class="table-auto w-full m-10 max-w-7xl overflow-auto">
+            <thead class="border-b-2 border-gray-300">
             <tr class="text-left">
                 <th>{{__('Stok Adı')}}</th>
                 <th>{{__('Miktar')}}</th>
                 <th>{{__('Fiyat')}}</th>
                 <th>{{__('İskonto')}}</th>
                 <th>{{__('KDV')}}</th>
+                <th>{{__('Kur')}}</th>
+                <th>{{__('Para Birimi')}}</th>
+                <th>{{__('Ödeme Yöntemi')}}</th>
+                <th>{{__('Fatura Tarihi')}}</th>
+                <th>{{__('Son Ödeme Tarihi')}}</th>
                 <th>{{__('Toplam')}}</th>
                 <th class="flex justify-end">{{__('Düzenle')}}</th>
             </tr>
-        </thead>
-        <tbody class="divide-y-2 divide-gray-300">
-        @foreach($sfatura as $f)
-            <tr class="text-left hover:bg-gray-100">
-                <td class="py-2">
-                    {{\App\Models\Stok::where('id',$f['stokadi'])->value('stokadi')}}
-                </td>
-                <td class="py-2">
-                    {{$f['miktar']}}
-                </td>
-                <td class="py-2">
-                    {{$f['fiyat']}}
-                </td>
-                {{--İSKONTO === ($f['miktar']*$f['fiyat'])*($f['iskonto']/100)--}}
-                <td class="py-2">
-                    %{{$f['iskonto']}}
-                </td>
-                {{--KDV === ($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))*($f['kdv']/100)--}}
-                <td class="py-2">
-                    %{{$f['kdv']}}
-                </td>
-                {{--TOPLAM--}}
-                <td class="py-2">
-                    {{($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))+($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))*($f['kdv']/100)}}
-                </td>
-                <td class="py-2">
-                    <form action="{{ route('satisfatura.destroy', $f) }}" method="post">
-                        @csrf
-                        @method('DELETE')
+            </thead>
+            <tbody class="divide-y-2 divide-gray-300">
+            @foreach($sfatura as $f)
+                <tr class="text-left hover:bg-gray-100">
+                    <td class="py-2">
+                        {{\App\Models\Stok::where('id',$f['stokadi'])->value('stokadi')}}
+                    </td>
+                    <td class="py-2">
+                        {{$f['miktar']}}
+                    </td>
+                    <td class="py-2">
+                        {{$f['fiyat']}}
+                    </td>
+                    {{--İSKONTO === ($f['miktar']*$f['fiyat'])*($f['iskonto']/100)--}}
+                    <td class="py-2">
+                        %{{$f['iskonto']}}
+                    </td>
+                    {{--KDV === ($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))*($f['kdv']/100)--}}
+                    <td class="py-2">
+                        %{{$f['kdv']}}
+                    </td>
+                    <td class="py-2">
+                        {{$f['kur']}}
+                    </td>
+                    <td class="py-2">
+                        {{$f['parabirimi']}}
+                    </td>
+                    <td class="py-2">
+                        @if($f['odemeyontemi'] == 1)
+                            {{__('Nakit')}}
+                        @elseif($f['odemeyontemi'] == 2)
+                            {{__('Kredi Kartı')}}
+                        @else
+                            {{__('Havale')}}
+                        @endif
+                    </td>
+                    <td class="py-2">
+                        {{$f['faturatarihi']}}
+                    </td>
+                    <td class="py-2">
+                        {{$f['sontarih']}}
+                    </td>
+                    {{--TOPLAM--}}
+                    <td class="py-2">
+                        {{($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))+($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))*($f['kdv']/100)}}
+                    </td>
+                    <td class="py-2">
+                        <form action="{{ route('satisfatura.destroy', $f) }}" method="post">
+                            @csrf
+                            @method('DELETE')
 
-                        <div class="flex justify-end">
-                            <x-danger-button>
-                                {{ __('Sil') }}
-                            </x-danger-button>
-                        </div>
+                            <div class="flex justify-end">
+                                <x-danger-button>
+                                    {{ __('Sil') }}
+                                </x-danger-button>
+                            </div>
 
-                    </form>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
 
-    <span class="ml-12">
-        TOPLAM = {{$toplam}}
-    </span>
+        <span class="mr-16 mb-20 self-end">
+            TOPLAM = {{$toplam}}
+        </span>
+    </div>
 
 </x-app-layout>

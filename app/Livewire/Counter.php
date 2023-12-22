@@ -15,6 +15,13 @@ class Counter extends Component
     public $iskonto = 0;
     public $kdv = 0;
     public $toplam = 0;
+    public $kur = 0;
+    public $parabirimi = '₺';
+
+    public function birim()
+    {
+        $this->parabirimi;
+    }
 
     public function hesap()
     {
@@ -23,6 +30,12 @@ class Counter extends Component
         $iskonto = $this->iskonto;
         $kdv = $this->kdv;
         $this->toplam=($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))+($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))*($kdv/100);
+    }
+    public function kurfunc()
+    {
+        $kur = $this->kur;
+        $top = $this->toplam;
+        $this->toplam = intval($kur)*$top;
     }
     public function increment()
     {

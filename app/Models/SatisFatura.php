@@ -20,7 +20,12 @@ class SatisFatura extends Model
         'miktar',
         'fiyat',
         'kdv',
-        'iskonto'
+        'iskonto',
+        'faturatarihi',
+        'sontarih',
+        'odemeyontemi',
+        'parabirimi',
+        'kur',
     ];
 
     public function getSlugOptions() : SlugOptions

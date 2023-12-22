@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cari;
+use App\Models\FaturaCari;
 use App\Models\SatisFatura;
 use App\Models\Stok;
 use Illuminate\Http\Request;
@@ -59,7 +60,12 @@ class SatisFaturaController extends Controller
             'miktar' => $request->miktar,
             'fiyat' => $request->fiyat,
             'kdv' => $request->kdv,
-            'iskonto' => $request->iskonto
+            'iskonto' => $request->iskonto,
+            'faturatarihi' => $request->ftarih,
+            'sontarih' => $request->sontarih,
+            'odemeyontemi' => $request->odeme,
+            'parabirimi' => $request->parabirimi,
+            'kur' => $request->kur,
         ]);
 
         $sfatura->cari()->sync($request->cari);
@@ -98,6 +104,7 @@ class SatisFaturaController extends Controller
     public function destroy(string $id)
     {
         SatisFatura::findOrFail($id)->delete();
+        FaturaCari::findOrFail($id)->delete();
 
         return redirect()->route('satisfatura.index');
     }
