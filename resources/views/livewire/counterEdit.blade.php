@@ -1,10 +1,12 @@
 <div>
-    <form class="bg-white p-10 rounded-lg m-10 flex flex-col items-start mb-5 gap-10" method="post" action="{{ route('satisfatura.store') }}">
+    <form class="bg-white p-10 rounded-lg m-10 flex flex-col items-start mb-5 gap-10" method="post" action="{{ route('satisfatura.update',$fatura) }}">
         @csrf
+        @method('PUT')
+
         <div class="flex flex-row items-center gap-10">
             <div>
                 <x-input-label :value="__('Cariler')"/>
-                <select data-te-select-init name="cari" class="rounded-lg border-gray-300 mt-2">
+                <select wire:model="cari" data-te-select-init name="cari" class="rounded-lg border-gray-300 mt-2">
                     @foreach($cariler as $cari)
                         <option value="{{$cari['id']}}">{{$cari['name']}}</option>
                     @endforeach
@@ -12,7 +14,7 @@
             </div>
             <div>
                 <x-input-label :value="__('Stoklar')"/>
-                <select data-te-select-init name="stokadi" class="rounded-lg border-gray-300 mt-2">
+                <select wire:model="stok" data-te-select-init name="stokadi" class="rounded-lg border-gray-300 mt-2">
                     @foreach($stoklar as $stok)
                         <option value="{{$stok['id']}}">{{$stok['name']}}</option>
                     @endforeach
@@ -20,7 +22,7 @@
             </div>
             <div>
                 <label for="miktar" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{__('Miktar')}}</label>
-                <input value="" wire:change="hesap" wire:model="miktar" id="miktar" name="miktar" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Miktar" required>
+                <input wire:change="hesap" wire:model="miktar" id="miktar" name="miktar" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Miktar" required>
             </div>
             <div>
                 <label for="fiyat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{__('Fiyat')}}</label>
@@ -38,19 +40,19 @@
         <div class="flex flex-row items-center gap-10">
             <div>
                 <label for="faturano" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{__('Fatura No')}}</label>
-                <input id="faturano" name="faturano" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
+                <input wire:model="faturano" id="faturano" name="faturano" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
             </div>
             <div>
                 <label for="ftarih" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{__('Fatura Tarihi')}}</label>
-                <input value="{{date('Y-m-d')}}" id="ftarih" name="ftarih" type="date" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
+                <input wire:model="ftarih" value="{{date('Y-m-d')}}" id="ftarih" name="ftarih" type="date" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
             </div>
             <div>
                 <label for="sontarih" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{__('Son Ödeme Tarihi')}}</label>
-                <input value="{{date('Y-m-d')}}" id="sontarih" name="sontarih" type="date" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
+                <input wire:model="sontarih" id="sontarih" name="sontarih" type="date" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
             </div>
             <div>
-                <label for="odemeyontemi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{__('Ödeme Yöntemi')}}</label>
-                <select data-te-select-init name="odemeyontemi" class="rounded-lg border-gray-300">
+                <label for="odeme" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{__('Ödeme Yöntemi')}}</label>
+                <select wire:model="odemeyontemi" data-te-select-init name="odemeyontemi" class="rounded-lg border-gray-300">
                     <option value="1">{{__('Nakit')}}</option>
                     <option value="2">{{__('Kredi Kartı')}}</option>
                     <option value="3">{{__('Havale')}}</option>
@@ -58,14 +60,14 @@
             </div>
             <div>
                 <label for="odemedurumu" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{__('Ödeme Durumu')}}</label>
-                <select data-te-select-init name="odemedurumu" class="rounded-lg border-gray-300">
+                <select wire:model="odemedurumu" data-te-select-init name="odemedurumu" class="rounded-lg border-gray-300">
                     <option value="1">{{__('Ödendi')}}</option>
                     <option value="2">{{__('Ödenmedi ')}}</option>
                 </select>
             </div>
             <div>
                 <label for="parabirimi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{__('Para Birimi')}}</label>
-                <select wire:change="birim" wire:model="parabirimi" data-te-select-init name="parabirimi" class="rounded-lg border-gray-300">
+                <select wire:model="parabirimi" data-te-select-init name="parabirimi" class="rounded-lg border-gray-300">
                     <option value="₺">{{__('Türk Lirası')}}</option>
                     <option value="$">{{__('Dolar')}}</option>
                     <option value="€">{{__('Euro')}}</option>

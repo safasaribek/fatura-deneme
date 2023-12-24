@@ -5,12 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FaturaCari extends Model
+class InvoiceItems extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'satis_faturas_id',
-        'caris_id'
+        'items_id',
+        'invoices_id',
+        'amount',
+        'price',
+        'vat',
+        'discount',
+        'currency',
+        'rate',
     ];
+
 }

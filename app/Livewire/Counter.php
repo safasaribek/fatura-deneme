@@ -2,20 +2,19 @@
 
 namespace App\Livewire;
 
-use App\Models\Cari;
-use App\Models\SatisFatura;
-use App\Models\Stok;
+use App\Models\Clients;
+use App\Models\Items;
 use Livewire\Component;
 
 class Counter extends Component
 {
-    public $count = 0;
     public $miktar = 0;
     public $fiyat = 0;
     public $iskonto = 0;
     public $kdv = 0;
     public $toplam = 0;
-    public $kur = 0;
+    public $salttoplam = 0;
+    public $kur = 1;
     public $parabirimi = '₺';
 
     public function birim()
@@ -30,22 +29,19 @@ class Counter extends Component
         $iskonto = $this->iskonto;
         $kdv = $this->kdv;
         $this->toplam=($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))+($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))*($kdv/100);
+        $this->salttoplam=($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))+($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))*($kdv/100);
     }
     public function kurfunc()
     {
         $kur = $this->kur;
-        $top = $this->toplam;
+        $top = $this->salttoplam;
         $this->toplam = intval($kur)*$top;
-    }
-    public function increment()
-    {
-        $this->count++;
     }
 
     public function render()
     {
-        $cariler = Cari::all();
-        $stoklar = Stok::all();
+        $cariler = Clients::all();
+        $stoklar = Items::all();
         return view('livewire.counter',compact('cariler','stoklar'));
     }
 }

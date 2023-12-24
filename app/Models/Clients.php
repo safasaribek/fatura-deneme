@@ -8,30 +8,30 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Cari extends Model
+class Clients extends Model
 {
     use HasFactory,SoftDeletes,HasSlug;
 
     protected $fillable = [
-        'adi',
-        'soyadi',
+        'name',
+        'surname',
         'email',
         'slug',
-        'kimlikno',
-        'vergino',
-        'telefon',
-        'adres',
-        'ulke',
-        'il',
-        'ilce',
-        'caritipi',
-        'bakiye',
+        'identity',
+        'tax',
+        'phone',
+        'address',
+        'country',
+        'city',
+        'district',
+        'type',
+        'balance',
     ];
 
     public function getSlugOptions() : SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('adi')
+            ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
 

@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Stok;
+use App\Models\Items;
 use Illuminate\Http\Request;
 
-class StokController extends Controller
+class ItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $stoklar = Stok::all();
+        $stoklar = Items::all();
         return view('stok.index',compact('stoklar'));
     }
 
@@ -29,11 +29,11 @@ class StokController extends Controller
      */
     public function store(Request $request)
     {
-        Stok::create([
-            'stokadi' => $request->stokadi,
-            'birim' => $request->birim,
-            'miktar' => $request->miktar,
-            'fiyat' => $request->fiyat,
+        Items::create([
+            'name' => $request->stokadi,
+            'unit' => $request->birim,
+            'amount' => $request->miktar,
+            'price' => $request->fiyat,
         ]);
 
         return redirect()->route('stoklar.index');
@@ -52,7 +52,7 @@ class StokController extends Controller
      */
     public function edit(string $id)
     {
-        $stok = Stok::findOrFail($id);
+        $stok = Items::findOrFail($id);
         return view('stok.edit',compact('stok'));
     }
 
@@ -61,7 +61,16 @@ class StokController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $stok = Items::findOrFail($id);
+
+        $stok->update([
+            'name' => $request->stokadi,
+            'unit' => $request->birim,
+            'amount' => $request->miktar,
+            'price' => $request->fiyat,
+        ]);
+
+        return redirect()->route('stoklar.edit',$stok);
     }
 
     /**

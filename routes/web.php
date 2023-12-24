@@ -18,11 +18,11 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::resource('satisfatura',\App\Http\Controllers\SatisFaturaController::class);
+Route::resource('satisfatura',\App\Http\Controllers\InvoiceController::class);
 
-Route::resource('cariler',\App\Http\Controllers\CariController::class);
+Route::resource('cariler',\App\Http\Controllers\ClientController::class);
 
-Route::resource('stoklar',\App\Http\Controllers\StokController::class);
+Route::resource('stoklar',\App\Http\Controllers\ItemController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -41,16 +41,16 @@
                         @foreach($stoklar as $stok)
                             <tr class="text-left hover:bg-gray-100">
                                 <td class="py-2">
-                                    {{ $stok->stokadi }}
+                                    {{ $stok->name }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $stok->birim }}
+                                    {{ $stok->unit }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $stok->miktar }}
+                                    {{ $stok->amount }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $stok->fiyat }}
+                                    {{ $stok->price }}
                                 </td>
                                 <td>
                                     <div class="flex items-center">

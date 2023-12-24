@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fatura_caris', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('satis_faturas_id')->constrained();
-            $table->foreignId('caris_id')->constrained();
+            $table->string('name');
+            $table->string('unit');
+            $table->integer('amount');
+            $table->integer('price');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fatura_caris');
+        Schema::dropIfExists('items');
     }
 };

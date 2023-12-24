@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cari;
+use App\Models\Clients;
 use Illuminate\Http\Request;
 
-class CariController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $cariler = Cari::all();
+        $cariler = Clients::all();
         return view('cariler.index',compact('cariler'));
     }
 
@@ -37,18 +37,18 @@ class CariController extends Controller
 //            'adı.max' => 'Başlık en fazla 255 karakter olmalıdır',
 //        ]);
 
-        Cari::create([
-            'adi'=>$request->adi,
-            'soyadi'=>$request->soyadi,
+        Clients::create([
+            'name'=>$request->adi,
+            'surname'=>$request->soyadi,
             'email'=>$request->email,
-            'kimlikno'=>$request->kimlikno,
-            'vergino'=>$request->vergino,
-            'telefon'=>$request->telefon,
-            'caritipi'=>$request->tip,
-            'ulke'=>$request->ulke,
-            'il'=>$request->il,
-            'ilce'=>$request->ilce,
-            'adres'=>$request->adres,
+            'identity'=>$request->kimlikno,
+            'tax'=>$request->vergino,
+            'phone'=>$request->telefon,
+            'type'=>$request->tip,
+            'country'=>$request->ulke,
+            'city'=>$request->il,
+            'district'=>$request->ilce,
+            'address'=>$request->adres,
         ]);
 
         return redirect()->route('cariler.index');
@@ -67,7 +67,7 @@ class CariController extends Controller
      */
     public function edit(string $id)
     {
-        $cariler = Cari::findOrFail($id);
+        $cariler = Clients::findOrFail($id);
         return view('cariler.edit',compact('cariler'));
     }
 
@@ -77,20 +77,20 @@ class CariController extends Controller
     public function update(Request $request, string $id)
     {
 
-        $cari = Cari::findOrFail($id);
+        $cari = Clients::findOrFail($id);
 
         $cari->update([
-            'adi'=>$request->adi,
-            'soyadi'=>$request->soyadi,
+            'name'=>$request->adi,
+            'surname'=>$request->soyadi,
             'email'=>$request->email,
-            'kimlikno'=>$request->kimlikno,
-            'vergino'=>$request->vergino,
-            'telefon'=>$request->telefon,
-            'caritipi'=>$request->tip,
-            'ulke'=>$request->ulke,
-            'il'=>$request->il,
-            'ilce'=>$request->ilce,
-            'adres'=>$request->adres,
+            'identity'=>$request->kimlikno,
+            'tax'=>$request->vergino,
+            'phone'=>$request->telefon,
+            'type'=>$request->tip,
+            'country'=>$request->ulke,
+            'city'=>$request->il,
+            'district'=>$request->ilce,
+            'address'=>$request->adres,
         ]);
 
         return redirect()->route('cariler.edit',$cari)->with('success','Güncellendi');

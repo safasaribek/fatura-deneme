@@ -56,28 +56,28 @@
                         @foreach($cariler as $cari)
                             <tr class="text-left hover:bg-gray-100">
                                 <td class="py-2">
-                                    {{ $cari->adi }}
+                                    {{ $cari->name }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $cari->soyadi }}
+                                    {{ $cari->surname }}
                                 </td>
                                 <td class="py-2">
                                     {{ $cari->email }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $cari->kimlikno }}
+                                    {{ $cari->identity }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $cari->vergino }}
+                                    {{ $cari->tax }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $cari->caritipi }}
+                                    {{ $cari->type }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $cari->telefon }}
+                                    {{ $cari->phone }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $cari->adres }}
+                                    {{ $cari->address }}
                                 </td>
                                 <td>
                                     <div class="flex items-center">

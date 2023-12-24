@@ -15,7 +15,7 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('satisfatura.index')" :active="request()->routeIs('satisfatura.index')">
+                    <x-nav-link :href="route('satisfatura.index')" :active="request()->routeIs('satisfatura.index','satisfatura.edit','satisfatura.create')">
                         {{ __('Satış Faturası') }}
                     </x-nav-link>
                     <x-nav-link :href="route('cariler.index')" :active="request()->routeIs('cariler.index','cariler.create','cariler.edit')">

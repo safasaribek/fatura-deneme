@@ -18,11 +18,11 @@
                 <div class="flex flex-row gap-5 bg-white p-5 rounded-lg flex-wrap">
                     <div>
                         <x-input-label :value="__('Cari Adı')"/>
-                        <x-text-input class="w-32" name="adi" placeholder="Cari Adı" value="{{ old('adi',$cariler->adi) }}"/>
+                        <x-text-input class="w-32" name="adi" placeholder="Cari Adı" value="{{ old('adi',$cariler->name) }}"/>
                     </div>
                     <div>
                         <x-input-label :value="__('Cari Soyadı')"/>
-                        <x-text-input class="w-32" name="soyadi" placeholder="Cari Soyadı" value="{{ old('soyadi',$cariler->soyadi) }}"/>
+                        <x-text-input class="w-32" name="soyadi" placeholder="Cari Soyadı" value="{{ old('soyadi',$cariler->surname) }}"/>
                     </div>
                     <div>
                         <x-input-label :value="__('Email')"/>
@@ -30,22 +30,22 @@
                     </div>
                     <div>
                         <x-input-label :value="__('Kimlik No')"/>
-                        <x-text-input class="w-40" type="number" name="kimlikno" placeholder="Kimlik No" value="{{ old('kimlikno',$cariler->kimlikno) }}"/>
+                        <x-text-input class="w-40" type="number" name="kimlikno" placeholder="Kimlik No" value="{{ old('kimlikno',$cariler->identity) }}"/>
                     </div>
                     <div>
                         <x-input-label :value="__('Vergi No')"/>
-                        <x-text-input class="w-40" type="number" name="vergino" placeholder="Vergi No" value="{{ old('vergino',$cariler->vergino) }}"/>
+                        <x-text-input class="w-40" type="number" name="vergino" placeholder="Vergi No" value="{{ old('vergino',$cariler->tax) }}"/>
                     </div>
                     <div>
                         <x-input-label :value="__('Telefon')"/>
-                        <x-text-input class="w-40" type="number" name="telefon" placeholder="Telefon" value="{{ old('telefon',$cariler->telefon) }}"/>
+                        <x-text-input class="w-40" type="number" name="telefon" placeholder="Telefon" value="{{ old('telefon',$cariler->phone) }}"/>
                     </div>
                     <div>
                         <x-input-label :value="__('Cari Tipi')"/>
                         <select data-te-select-init name="tip" class="rounded-lg border-gray-300">
-                            <option {{$cariler->caritipi = '1' ? 'selected' : ''}} value="1">{{__('Alıcı')}}</option>
-                            <option {{$cariler->caritipi = '2' ? 'selected' : ''}} value="2">{{__('Satıcı')}}</option>
-                            <option {{$cariler->caritipi = '3' ? 'selected' : ''}} value="3">{{__('Personel')}}</option>
+                            <option {{$cariler->type = '1' ? 'selected' : ''}} value="1">{{__('Alıcı')}}</option>
+                            <option {{$cariler->type = '2' ? 'selected' : ''}} value="2">{{__('Satıcı')}}</option>
+                            <option {{$cariler->type = '3' ? 'selected' : ''}} value="3">{{__('Personel')}}</option>
                         </select>
                     </div>
                     <div>
@@ -75,7 +75,7 @@
                     <div class="w-full">
                         <x-input-label :value="__('Adres')"/>
                         <textarea name="adres" class="w-full rounded p-4 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
-                            {{old('adres',$cariler->adres)}}
+                            {{old('adres',$cariler->address)}}
                         </textarea>
                     </div>
                 </div>
