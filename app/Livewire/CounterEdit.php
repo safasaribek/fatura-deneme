@@ -52,8 +52,16 @@ class CounterEdit extends Component
         $this->odemedurumu = $fatura->payment_status;
         $this->parabirimi = $faturaurunu->currency;
         $this->kur = $faturaurunu->rate;
-        $this->toplam=(($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))+($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))*($faturaurunu->vat/100))*$faturaurunu->rate;
-        $this->salttoplam=($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))+($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))*($faturaurunu->vat/100);
+
+        $brutFiyat = $faturaurunu->amount * $faturaurunu->price;
+        $iskontoMiktari = $brutFiyat * ($faturaurunu->discount / 100);
+        $netFiyat = $brutFiyat - $iskontoMiktari;
+        $kdvMiktari = $netFiyat * ($faturaurunu->vat / 100);
+        $this->toplam = ($netFiyat + $kdvMiktari)*$faturaurunu->rate;
+        $this->salttoplam = ($netFiyat + $kdvMiktari)*$faturaurunu->rate;
+
+//        $this->toplam=(($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))+($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))*($faturaurunu->vat/100))*$faturaurunu->rate;
+//        $this->salttoplam=($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))+($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))*($faturaurunu->vat/100);
     }
 
     public function birim()
@@ -63,11 +71,21 @@ class CounterEdit extends Component
 
     public function hesap()
     {
-        $miktar = $this->miktar;
-        $fiyat = $this->fiyat;
-        $iskonto = $this->iskonto;
-        $kdv = $this->kdv;
-        $this->toplam=($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))+($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))*($kdv/100);
+//        $miktar = $this->miktar;
+//        $fiyat = $this->fiyat;
+//        $iskonto = $this->iskonto;
+//        $kdv = $this->kdv;
+
+        $brutFiyat = $this->miktar * $this->fiyat;
+        $iskontoMiktari = $brutFiyat * ($this->iskonto / 100);
+        $netFiyat = $brutFiyat - $iskontoMiktari;
+        $kdvMiktari = $netFiyat * ($this->kdv / 100);
+        $this->toplam = $netFiyat + $kdvMiktari;
+        $this->salttoplam = $netFiyat + $kdvMiktari;
+
+        $this->kurfunc();
+
+//        $this->toplam=($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))+($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))*($kdv/100);
     }
     public function kurfunc()
     {

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('clients_id')->constrained();
+            $table->foreignId('client_id')->constrained();
             $table->integer('invoice_number');
             $table->dateTime('invoice_date')->nullable();
             $table->dateTime('deadline')->nullable();

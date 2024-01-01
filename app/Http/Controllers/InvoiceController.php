@@ -7,6 +7,7 @@ use App\Models\InvoiceItems;
 use App\Models\Invoices;
 use App\Models\Items;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class InvoiceController extends Controller
@@ -42,43 +43,43 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-//        $request->validate([
-//            'stokadi' => 'required|min:3|max:20',
-//            'miktar' => 'required|integer',
-//            'fiyat' => 'required|integer'
-//        ],[
-//            'stokadi.required' => 'Stok Adı alanı zorunludur',
-//            'stokadi.min' => 'Başlık en az 3 karakter olmalıdır',
-//            'stokadi.max' => 'Başlık en fazla 255 karakter olmalıdır',
+
+        $request->validate([
+            'cari' => 'required',
+//            'miktar' => 'required',
+//            'fiyat' => 'required'
+        ],[
+            'cari.required' => 'Miktar alanı zorunludur',
 //            'miktar.required' => 'Miktar alanı zorunludur',
-//            'miktar.integer' => 'Miktar sayı olmalıdır',
 //            'fiyat.required' => 'Fiyat alanı zorunludur',
-//            'fiyat.integer' => 'Fiyat sayı olmalıdır',
-//        ]);
-
-        $sfatura = Invoices::create([
-            'clients_id' => $request->cari,
-            'invoice_number' => $request->faturano,
-            'invoice_date' => $request->ftarih,
-            'deadline' => $request->sontarih,
-            'payment_method' => $request->odemeyontemi,
-            'payment_status' => $request->odemedurumu,
         ]);
 
-        $sfatura->cari()->sync($request->cari);
+        DB::transaction(function () use($request) {
+            $sfatura = Invoices::create([
+                'client_id' => $request->cari,
+                'invoice_number' => $request->faturano,
+                'invoice_date' => $request->ftarih,
+                'deadline' => $request->sontarih,
+                'payment_method' => $request->odemeyontemi,
+                'payment_status' => $request->odemedurumu,
+            ]);
 
-        InvoiceItems::create([
-            'invoices_id' => $sfatura->id,
-            'items_id' => $request->stokadi,
-            'amount' => $request->miktar,
-            'price' => $request->fiyat,
-            'vat' => $request->kdv,
-            'discount' => $request->iskonto,
-            'currency' => $request->parabirimi,
-            'rate' => $request->kur,
-        ]);
+            foreach ($request->items as $item) {
+                InvoiceItems::create([
+                    'invoice_id' => $sfatura->id,
+                    'item_id' => $item['name'],
+                    'amount' => $item['quantity'],
+                    'price' => $item['price'],
+                    'vat' => $item['tax'],
+                    'discount' => $item['discount'],
+                    'currency' => $request->parabirimi,
+                    'rate' => $request->kur,
+                ]);
+            }
 
-        return redirect()->route('satisfatura.index');
+        });
+
+        return redirect()->route('satisfatura.index')->with('success', 'Fatura oluşturuldu.');
 
     }
 
