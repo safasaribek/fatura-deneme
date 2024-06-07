@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Clients extends Model
+class Client extends Model
 {
-    use HasFactory,SoftDeletes,HasSlug;
+    use HasFactory, SoftDeletes, HasSlug;
 
     protected $fillable = [
         'name',
@@ -28,7 +28,7 @@ class Clients extends Model
         'balance',
     ];
 
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')

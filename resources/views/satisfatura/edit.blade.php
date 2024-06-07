@@ -8,11 +8,7 @@
         </div>
     </x-slot>
 
-
-    @livewireStyles
-    <livewire:counteredit :params="['fatura' => $fatura, 'faturaurunu' => $faturaurunu]" />
-    @livewireScripts
-
+    <livewire:invoice :invoice="$invoice"/>
 
 </x-app-layout>
 

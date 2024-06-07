@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -19,6 +18,10 @@ return new class extends Migration
             $table->dateTime('deadline')->nullable();
             $table->integer('payment_method');
             $table->integer('payment_status');
+            $table->decimal('total');
+            $table->decimal('discount_total');
+            $table->decimal('vat_total');
+            $table->decimal('grand_total');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -3,8 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\Cari;
-use App\Models\Clients;
-use App\Models\Items;
+use App\Models\Client;
+use App\Models\Item;
 use App\Models\SatisFatura;
 use App\Models\Stok;
 use Livewire\Component;
@@ -46,8 +46,8 @@ class CounterEdit extends Component
         $this->iskonto = $faturaurunu->discount;
         $this->kdv = $faturaurunu->vat;
         $this->faturano = $fatura->invoice_number;
-        $this->ftarih = explode(' ',$fatura->invoice_date)[0];
-        $this->sontarih = explode(' ',$fatura->deadline)[0];
+        $this->ftarih = explode(' ', $fatura->invoice_date)[0];
+        $this->sontarih = explode(' ', $fatura->deadline)[0];
         $this->odemeyontemi = $fatura->payment_method;
         $this->odemedurumu = $fatura->payment_status;
         $this->parabirimi = $faturaurunu->currency;
@@ -57,8 +57,8 @@ class CounterEdit extends Component
         $iskontoMiktari = $brutFiyat * ($faturaurunu->discount / 100);
         $netFiyat = $brutFiyat - $iskontoMiktari;
         $kdvMiktari = $netFiyat * ($faturaurunu->vat / 100);
-        $this->toplam = ($netFiyat + $kdvMiktari)*$faturaurunu->rate;
-        $this->salttoplam = ($netFiyat + $kdvMiktari)*$faturaurunu->rate;
+        $this->toplam = ($netFiyat + $kdvMiktari) * $faturaurunu->rate;
+        $this->salttoplam = ($netFiyat + $kdvMiktari) * $faturaurunu->rate;
 
 //        $this->toplam=(($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))+($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))*($faturaurunu->vat/100))*$faturaurunu->rate;
 //        $this->salttoplam=($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))+($faturaurunu->amount*$faturaurunu->price-($faturaurunu->amount*$faturaurunu->price)*($faturaurunu->discount/100))*($faturaurunu->vat/100);
@@ -87,17 +87,18 @@ class CounterEdit extends Component
 
 //        $this->toplam=($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))+($miktar*$fiyat-($miktar*$fiyat)*($iskonto/100))*($kdv/100);
     }
+
     public function kurfunc()
     {
         $kur = $this->kur;
         $top = $this->salttoplam;
-        $this->toplam = $kur*$top;
+        $this->toplam = $kur * $top;
     }
 
     public function render()
     {
-        $cariler = Clients::all();
-        $stoklar = Items::all();
-        return view('livewire.counterEdit',compact('cariler','stoklar'));
+        $cariler = Client::all();
+        $stoklar = Item::all();
+        return view('livewire.counterEdit', compact('cariler', 'stoklar'));
     }
 }

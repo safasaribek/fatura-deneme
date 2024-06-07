@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Items;
+use App\Models\Item;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -12,8 +12,8 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $stoklar = Items::all();
-        return view('stok.index',compact('stoklar'));
+        $stoklar = Item::all();
+        return view('stok.index', compact('stoklar'));
     }
 
     /**
@@ -29,7 +29,7 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        Items::create([
+        Item::create([
             'name' => $request->stokadi,
             'unit' => $request->birim,
             'amount' => $request->miktar,
@@ -52,8 +52,8 @@ class ItemController extends Controller
      */
     public function edit(string $id)
     {
-        $stok = Items::findOrFail($id);
-        return view('stok.edit',compact('stok'));
+        $stok = Item::findOrFail($id);
+        return view('stok.edit', compact('stok'));
     }
 
     /**
@@ -61,7 +61,7 @@ class ItemController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $stok = Items::findOrFail($id);
+        $stok = Item::findOrFail($id);
 
         $stok->update([
             'name' => $request->stokadi,
@@ -70,7 +70,7 @@ class ItemController extends Controller
             'price' => $request->fiyat,
         ]);
 
-        return redirect()->route('stoklar.edit',$stok);
+        return redirect()->route('stoklar.edit', $stok);
     }
 
     /**
@@ -78,6 +78,8 @@ class ItemController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Item::findOrFail($id)->delete();
+
+        return redirect()->route('stoklar.index');
     }
 }

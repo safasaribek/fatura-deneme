@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Clients;
-use App\Models\InvoiceItems;
-use App\Models\Invoices;
-use App\Models\Items;
+use App\Models\Client;
+use App\Models\InvoiceItem;
+use App\Models\Invoice;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -17,17 +17,9 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $cari = Clients::all();
-        $sfatura = Invoices::all();
-        $faturaurunu = InvoiceItems::all();
+        $invoices = Invoice::with('client')->paginate(10);
 
-        $toplam = 0;
-        foreach($faturaurunu as $f) {
-            $iskonto = ($f['amount']*$f['price']-($f['amount']*$f['price'])*($f['discount']/100));
-            $kdv = ($f['amount']*$f['price']-($f['amount']*$f['price'])*($f['discount']/100))*($f['vat']/100);
-            $toplam += ($iskonto + $kdv)*$f['rate'];
-        }
-        return view('satisfatura.index',compact('sfatura','toplam','cari','faturaurunu'));
+        return view('satisfatura.index', compact('invoices'));
     }
 
     /**
@@ -44,36 +36,44 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
-            'cari' => 'required',
-//            'miktar' => 'required',
-//            'fiyat' => 'required'
-        ],[
-            'cari.required' => 'Miktar alanı zorunludur',
-//            'miktar.required' => 'Miktar alanı zorunludur',
-//            'fiyat.required' => 'Fiyat alanı zorunludur',
-        ]);
+//        $request->validate([
+//            'cari' => 'required',
+//            'name' => 'required',
+//        ], [
+//            'cari.required' => 'Cari alanı zorunludur',
+//            'name.required' => 'Stok alanı zorunludur',
+//        ]);
 
-        DB::transaction(function () use($request) {
-            $sfatura = Invoices::create([
-                'client_id' => $request->cari,
-                'invoice_number' => $request->faturano,
-                'invoice_date' => $request->ftarih,
-                'deadline' => $request->sontarih,
-                'payment_method' => $request->odemeyontemi,
-                'payment_status' => $request->odemedurumu,
+        DB::transaction(function () use ($request) {
+            $invoice = Invoice::create([
+                'client_id' => $request->client,
+                'invoice_number' => $request->invoiceNo,
+                'invoice_date' => $request->invoiceDate,
+                'deadline' => $request->deadline,
+                'payment_method' => $request->paymentMethod,
+                'payment_status' => $request->paymentStatus,
+
+                'total' => $request->invoiceTotal,
+                'discount_total' => $request->discountTotal,
+                'vat_total' => $request->vatTotal,
+                'grand_total' => $request->grandTotal
             ]);
 
             foreach ($request->items as $item) {
-                InvoiceItems::create([
-                    'invoice_id' => $sfatura->id,
+                InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
                     'item_id' => $item['name'],
-                    'amount' => $item['quantity'],
+                    'quantity' => $item['quantity'],
                     'price' => $item['price'],
-                    'vat' => $item['tax'],
-                    'discount' => $item['discount'],
-                    'currency' => $request->parabirimi,
-                    'rate' => $request->kur,
+
+                    'vat_rate' => $item['vatRate'],
+                    'vat_total' => $item['vatTotal'],
+                    'discount_rate' => $item['discountRate'],
+                    'discount_total' => $item['discountTotal'],
+                    'currency' => $request->currency,
+                    'currency_rate' => $request->currencyRate,
+                    'total' => $item['invItmTotal'],
+                    'grand_total' => $item['invItmGrandTotal']
                 ]);
             }
 
@@ -96,9 +96,8 @@ class InvoiceController extends Controller
      */
     public function edit(string $id)
     {
-        $fatura = Invoices::findOrFail($id);
-        $faturaurunu = InvoiceItems::findOrFail($id);
-        return view('satisfatura.edit',compact('fatura','faturaurunu'));
+        $invoice = Invoice::findOrFail($id);
+        return view('satisfatura.edit', compact('invoice'));
     }
 
     /**
@@ -106,32 +105,71 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $sfatura = Invoices::findOrFail($id);
-        $faturaurun = InvoiceItems::findOrFail($id);
+        $invoice = Invoice::findOrFail($id);
+//        $invoiceItem = InvoiceItem::findOrFail($id);
+//        $invoiceItems = $invoice->invoiceItem;
+//        $invoiceItems = InvoiceItem::where('invoice_id', $id)->get();
 
-        $sfatura->update([
-            'clients_id' => $request->cari,
-            'invoice_number' => $request->faturano,
-            'invoice_date' => $request->ftarih,
-            'deadline' => $request->sontarih,
-            'payment_method' => $request->odemeyontemi,
-            'payment_status' => $request->odemedurumu,
-        ]);
+        DB::transaction(function () use ($request, $invoice) {
 
-        $sfatura->cari()->sync($request->cari);
+            $invoice->update([
+                'client_id' => $request->client,
+                'invoice_number' => $request->invoiceNo,
+                'invoice_date' => $request->invoiceDate,
+                'deadline' => $request->deadline,
+                'payment_method' => $request->paymentMethod,
+                'payment_status' => $request->paymentStatus,
 
-        $faturaurun->update([
-            'invoices_id' => $sfatura->id,
-            'items_id' => $request->stokadi,
-            'amount' => $request->miktar,
-            'price' => $request->fiyat,
-            'vat' => $request->kdv,
-            'discount' => $request->iskonto,
-            'currency' => $request->parabirimi,
-            'rate' => $request->kur,
-        ]);
+                'total' => $request->invoiceTotal,
+                'discount_total' => $request->discountTotal,
+                'vat_total' => $request->vatTotal,
+                'grand_total' => $request->grandTotal
+            ]);
 
-        return redirect()->route('satisfatura.edit',$sfatura);
+            foreach ($request->items as $item) {
+
+                $invoiceItems = InvoiceItem::where('invoice_id', $invoice->id)
+                    ->where('item_id', $item['name'])
+                    ->first();
+
+                if ($invoiceItems) {
+                    $invoiceItems->update([
+                        'invoice_id' => $invoice->id,
+                        'item_id' => $item['name'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'vat_rate' => $item['vatRate'],
+                        'vat_total' => $item['vatTotal'],
+                        'discount_rate' => $item['discountRate'],
+                        'discount_total' => $item['discountTotal'],
+                        'currency' => $request->currency,
+                        'currency_rate' => $request->currencyRate,
+                        'total' => $item['invItmTotal'],
+                        'grand_total' => $item['invItmGrandTotal']
+                    ]);
+                } else {
+                    InvoiceItem::create([
+                        'invoice_id' => $invoice->id,
+                        'item_id' => $item['name'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'vat_rate' => $item['vatRate'],
+                        'vat_total' => $item['vatTotal'],
+                        'discount_rate' => $item['discountRate'],
+                        'discount_total' => $item['discountTotal'],
+                        'currency' => $request->currency,
+                        'currency_rate' => $request->currencyRate,
+                        'total' => $item['invItmTotal'],
+                        'grand_total' => $item['invItmGrandTotal']
+                    ]);
+                }
+            }
+
+        });
+
+        //$invoice->client()->sync($request->cari);
+
+        return redirect()->route('satisfatura.edit', $invoice);
     }
 
     /**
@@ -139,8 +177,9 @@ class InvoiceController extends Controller
      */
     public function destroy(string $id)
     {
-        Invoices::findOrFail($id)->delete();
-//        FaturaCari::findOrFail($id)->delete();
+        $inv = Invoice::findOrFail($id);
+        $inv->delete();
+        InvoiceItem::where('invoice_id', $inv->id)->delete();
 
         return redirect()->route('satisfatura.index');
     }

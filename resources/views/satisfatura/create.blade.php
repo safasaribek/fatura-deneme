@@ -8,12 +8,7 @@
         </div>
     </x-slot>
 
-
-    @livewireStyles
-    <livewire:counter/>
-    @livewireScripts
-
-
+    <livewire:invoice/>
 </x-app-layout>
 
 

@@ -18,25 +18,39 @@
                 <div class="flex flex-row gap-5 bg-white p-5 rounded-lg flex-wrap">
                     <div>
                         <x-input-label :value="__('Stok Adı')"/>
-                        <x-text-input class="w-32" name="stokadi" placeholder="Stok Adı" value="{{ old('stokadi',$stok->name) }}"/>
+                        <x-text-input class="w-32" name="stokadi" placeholder="Stok Adı"
+                                      value="{{ old('stokadi',$stok->name) }}"/>
                     </div>
                     <div>
                         <x-input-label :value="__('Birim')"/>
-                        <x-text-input class="w-32" name="birim" placeholder="Birim" value="{{ old('birim',$stok->unit) }}"/>
+                        <x-text-input class="w-32" name="birim" placeholder="Birim"
+                                      value="{{ old('birim',$stok->unit) }}"/>
                     </div>
                     <div>
                         <x-input-label :value="__('Miktar')"/>
-                        <x-text-input type="number" name="miktar" placeholder="Miktar" value="{{ old('miktar',$stok->amount) }}"/>
+                        <x-text-input type="number" name="miktar" placeholder="Miktar"
+                                      value="{{ old('miktar',$stok->quantity) }}"/>
                     </div>
                     <div>
                         <x-input-label :value="__('Fiyat')"/>
-                        <x-text-input type="number" name="fiyat" placeholder="Fiyat" value="{{ old('fiyat',$stok->price) }}"/>
+                        <x-text-input type="number" name="fiyat" placeholder="Fiyat"
+                                      value="{{ old('fiyat',$stok->price) }}"/>
                     </div>
                 </div>
 
-                <div class="flex justify-end p-6 bg-white shadow-sm sm:rounded-lg w-full">
+                <div class="flex gap-2 justify-end p-6 bg-white shadow-sm sm:rounded-lg w-full">
+                    <form action="{{ route('stoklar.destroy', $stok) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+
+                        <div class="flex justify-end">
+                            <x-danger-button>
+                                {{ __('Sil') }}
+                            </x-danger-button>
+                        </div>
+                    </form>
                     <a href="{{ route('stoklar.index') }}">
-                        <x-secondary-button class="mr-2">
+                        <x-secondary-button>
                             {{ __('İptal') }}
                         </x-secondary-button>
                     </a>

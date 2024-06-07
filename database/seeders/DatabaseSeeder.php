@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Client;
+use App\Models\Item;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -25,6 +27,19 @@ class DatabaseSeeder extends Seeder
             'name' => 'admin',
             'email' => 'safa@safa',
             'password' => Hash::make(12345678)
+        ]);
+
+        Item::create([
+            'name' => 'saat',
+            'unit' => 'adet',
+            'quantity' => '10',
+            'price' => '1500',
+        ]);
+        Item::create([
+            'name' => 'gömlek',
+            'unit' => 'adet',
+            'quantity' => '25',
+            'price' => '730',
         ]);
     }
 }

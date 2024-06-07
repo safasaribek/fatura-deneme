@@ -12,7 +12,6 @@
     </x-slot>
 
 
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -47,7 +46,7 @@
                                     {{ $stok->unit }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $stok->amount }}
+                                    {{ $stok->quantity }}
                                 </td>
                                 <td class="py-2">
                                     {{ $stok->price }}

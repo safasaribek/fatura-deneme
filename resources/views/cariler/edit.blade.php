@@ -81,9 +81,19 @@
                 </div>
 
 
-                <div class="flex justify-end p-6 bg-white shadow-sm sm:rounded-lg w-full">
+                <div class="flex gap-2 justify-end p-6 bg-white shadow-sm sm:rounded-lg w-full">
+                    <form action="{{ route('cariler.destroy', $cariler) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+
+                        <div class="flex justify-end">
+                            <x-danger-button>
+                                {{ __('Sil') }}
+                            </x-danger-button>
+                        </div>
+                    </form>
                     <a href="{{ route('cariler.index') }}">
-                        <x-secondary-button class="mr-2">
+                        <x-secondary-button>
                             {{ __('İptal') }}
                         </x-secondary-button>
                     </a>

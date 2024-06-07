@@ -11,97 +11,77 @@
         </div>
     </x-slot>
 
-    <div class="flex flex-col">
-        <table class="table-auto w-full m-10 max-w-7xl overflow-auto">
-            <thead class="border-b-2 border-gray-300">
-            <tr class="text-left">
-{{--                <th>{{__('Stok Adı')}}</th>--}}
-{{--                <th>{{__('Miktar')}}</th>--}}
-{{--                <th>{{__('Fiyat')}}</th>--}}
-{{--                <th>{{__('İskonto')}}</th>--}}
-{{--                <th>{{__('KDV')}}</th>--}}
-{{--                <th>{{__('Kur')}}</th>--}}
-{{--                <th>{{__('Para Birimi')}}</th>--}}
-{{--                <th>{{__('Toplam')}}</th>--}}
-                <th>{{__('Ödeme Yöntemi')}}</th>
-                <th>{{__('Fatura Tarihi')}}</th>
-                <th>{{__('Son Ödeme Tarihi')}}</th>
-                <th class="flex justify-end">{{__('İşlemler')}}</th>
-            </tr>
-            </thead>
-            <tbody class="divide-y-2 divide-gray-300">
-            @foreach($sfatura as $f)
-                <tr class="text-left hover:bg-gray-100">
-{{--                    @foreach($faturaurunu as $urun)--}}
-{{--                        <td class="py-2">--}}
-{{--                            {{\App\Models\Items::where('id',$urun['items_id'])->value('name')}}--}}
-{{--                        </td>--}}
-{{--                        <td class="py-2">--}}
-{{--                            {{$urun['amount']}}--}}
-{{--                        </td>--}}
-{{--                        <td class="py-2">--}}
-{{--                            {{$urun['price']}}--}}
-{{--                        </td>--}}
-{{--                        --}}{{--İSKONTO === ($f['miktar']*$f['fiyat'])*($f['iskonto']/100)--}}
-{{--                        <td class="py-2">--}}
-{{--                            %{{$urun['discount']}}--}}
-{{--                        </td>--}}
-{{--                        --}}{{--KDV === ($f['miktar']*$f['fiyat']-($f['miktar']*$f['fiyat'])*($f['iskonto']/100))*($f['kdv']/100)--}}
-{{--                        <td class="py-2">--}}
-{{--                            %{{$urun['vat']}}--}}
-{{--                        </td>--}}
-{{--                        <td class="py-2">--}}
-{{--                            {{$urun['rate']}}--}}
-{{--                        </td>--}}
-{{--                        <td class="py-2">--}}
-{{--                            {{$urun['currency']}}--}}
-{{--                        </td>--}}
-{{--                        --}}{{--TOPLAM--}}
-{{--                        <td class="py-2">--}}
-{{--                            {{(($urun->amount*$urun->price-($urun->amount*$urun->price)*($urun->discount/100))+($urun->amount*$urun->price-($urun->amount*$urun->price)*($urun->discount/100))*($urun->vat/100))*$urun->rate}}--}}
-{{--                        </td>--}}
-{{--                    @endforeach--}}
-                    <td class="py-2">
-                        @if($f['payment_method'] == 1)
-                            {{__('Nakit')}}
-                        @elseif($f['payment_method'] == 2)
-                            {{__('Kredi Kartı')}}
-                        @else
-                            {{__('Havale')}}
-                        @endif
-                    </td>
-                    <td class="py-2">
-                        {{$f['invoice_date']}}
-                    </td>
-                    <td class="py-2">
-                        {{$f['deadline']}}
-                    </td>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 flex flex-col">
+                    <table class="table-auto w-full">
+                        <thead class="border-b-2 border-gray-300">
+                        <tr class="text-left">
+                            <th>{{__('Cari')}}</th>
+                            <th>{{__('Fatura No')}}</th>
+                            <th>{{__('Ödeme Yöntemi')}}</th>
+                            <th>{{__('Ödeme Durumu')}}</th>
+                            <th>{{__('Fatura Tarihi')}}</th>
+                            <th>{{__('Son Ödeme Tarihi')}}</th>
+                            <th>{{__('Fatura Toplamı')}}</th>
+                            <th class="flex justify-end">{{__('İşlemler')}}</th>
+                        </tr>
+                        </thead>
 
-                    <td class="py-2 flex flex-row items-center justify-end gap-5">
-                        <a href="{{ route('satisfatura.edit', $f) }}">
-                            <x-secondary-button class="bg-gray-600 text-white">
-                                {{ __('Düzenle') }}
-                            </x-secondary-button>
-                        </a>
-                        <form action="{{ route('satisfatura.destroy', $f) }}" method="post">
-                            @csrf
-                            @method('DELETE')
+                        <tbody class="divide-y-2 divide-gray-300">
+                        @foreach($invoices as $invoice)
+                            <tr class="text-left hover:bg-gray-100">
+                                <td>
+                                    {{ $invoice->client->name.' '.$invoice->client->surname }}
+                                </td>
+                                <td>
+                                    {{ $invoice->invoice_number }}
+                                </td>
+                                <td class="py-2">
+                                    @if($invoice['payment_method'] == 1)
+                                        {{__('Nakit')}}
+                                    @elseif($invoice['payment_method'] == 2)
+                                        {{__('Kredi Kartı')}}
+                                    @else
+                                        {{__('Havale')}}
+                                    @endif
+                                </td>
+                                <td class="py-2">
+                                    @if($invoice['payment_status'] == 1)
+                                        {{__('Ödendi')}}
+                                    @elseif($invoice['payment_status'] == 2)
+                                        {{__('Ödenmedi')}}
+                                    @endif
+                                </td>
+                                <td class="py-2">
+                                    {{\Carbon\Carbon::parse($invoice['invoice_date'])->format('d-m-Y')}}
+                                </td>
+                                <td class="py-2">
+                                    {{\Carbon\Carbon::parse($invoice['deadline'])->format('d-m-Y')}}
+                                </td>
+                                <td class="py-2">
+                                    {{$invoice->grand_total}}
+                                </td>
 
-                            <div class="flex justify-end">
-                                <x-danger-button>
-                                    {{ __('Sil') }}
-                                </x-danger-button>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-
-        <span class="mr-16 mb-20 self-end">
-            TOPLAM = {{$toplam}}
-        </span>
+                                <td class="py-2 flex flex-row items-center justify-end gap-5">
+                                    <a href="{{ route('satisfatura.edit', $invoice) }}">
+                                        <x-secondary-button class="bg-gray-600 text-white">
+                                            {{ __('Düzenle') }}
+                                        </x-secondary-button>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    {{--                    <span class="mt-5 self-end">Toplam = {{$toplam}}</span>--}}
+                    {{--                    <span class="self-end">İskonto = {{$iskonto}}</span>--}}
+                    {{--                    <span class="self-end">KDV = {{$kdv}}</span>--}}
+                    {{--                    <span class="self-end">Genel T. = {{$geneltoplam}}</span>--}}
+                </div>
+            </div>
+        </div>
     </div>
 
 </x-app-layout>

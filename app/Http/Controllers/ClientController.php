@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Clients;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -12,8 +12,8 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $cariler = Clients::all();
-        return view('cariler.index',compact('cariler'));
+        $cariler = Client::all();
+        return view('cariler.index', compact('cariler'));
     }
 
     /**
@@ -30,25 +30,29 @@ class ClientController extends Controller
     public function store(Request $request)
     {
 //        $request->validate([
-//            'adı' => 'required|min:3|max:255',
+//            'name' => 'required|min:3|max:255',
+//            'identity' => 'unique',
+//            'tax' => 'unique',
 //        ], [
-//            'adı.required' => 'Başlık alanı zorunludur',
-//            'adı.min' => 'Başlık en az 3 karakter olmalıdır',
-//            'adı.max' => 'Başlık en fazla 255 karakter olmalıdır',
+//            'name.required' => 'Başlık alanı zorunludur',
+//            'name.min' => 'Başlık en az 3 karakter olmalıdır',
+//            'name.max' => 'Başlık en fazla 255 karakter olmalıdır',
+//            'identity.unique' => 'Kimlik Kayıtlı',
+//            'tax.max' => 'Vergi No Kayıtlı',
 //        ]);
 
-        Clients::create([
-            'name'=>$request->adi,
-            'surname'=>$request->soyadi,
-            'email'=>$request->email,
-            'identity'=>$request->kimlikno,
-            'tax'=>$request->vergino,
-            'phone'=>$request->telefon,
-            'type'=>$request->tip,
-            'country'=>$request->ulke,
-            'city'=>$request->il,
-            'district'=>$request->ilce,
-            'address'=>$request->adres,
+        Client::create([
+            'name' => $request->adi,
+            'surname' => $request->soyadi,
+            'email' => $request->email,
+            'identity' => $request->kimlikno,
+            'tax' => $request->vergino,
+            'phone' => $request->telefon,
+            'type' => $request->tip,
+            'country' => $request->ulke,
+            'city' => $request->il,
+            'district' => $request->ilce,
+            'address' => $request->adres,
         ]);
 
         return redirect()->route('cariler.index');
@@ -67,8 +71,8 @@ class ClientController extends Controller
      */
     public function edit(string $id)
     {
-        $cariler = Clients::findOrFail($id);
-        return view('cariler.edit',compact('cariler'));
+        $cariler = Client::findOrFail($id);
+        return view('cariler.edit', compact('cariler'));
     }
 
     /**
@@ -77,23 +81,23 @@ class ClientController extends Controller
     public function update(Request $request, string $id)
     {
 
-        $cari = Clients::findOrFail($id);
+        $cari = Client::findOrFail($id);
 
         $cari->update([
-            'name'=>$request->adi,
-            'surname'=>$request->soyadi,
-            'email'=>$request->email,
-            'identity'=>$request->kimlikno,
-            'tax'=>$request->vergino,
-            'phone'=>$request->telefon,
-            'type'=>$request->tip,
-            'country'=>$request->ulke,
-            'city'=>$request->il,
-            'district'=>$request->ilce,
-            'address'=>$request->adres,
+            'name' => $request->adi,
+            'surname' => $request->soyadi,
+            'email' => $request->email,
+            'identity' => $request->kimlikno,
+            'tax' => $request->vergino,
+            'phone' => $request->telefon,
+            'type' => $request->tip,
+            'country' => $request->ulke,
+            'city' => $request->il,
+            'district' => $request->ilce,
+            'address' => $request->adres,
         ]);
 
-        return redirect()->route('cariler.edit',$cari)->with('success','Güncellendi');
+        return redirect()->route('cariler.edit', $cari)->with('success', 'Güncellendi');
     }
 
     /**
@@ -101,6 +105,9 @@ class ClientController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $client = Client::findOrFail($id);
+        $client->delete();
+
+        return redirect()->route('cariler.index');
     }
 }
